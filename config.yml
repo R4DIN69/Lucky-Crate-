@@ -1,0 +1,45 @@
+# ========================================================
+#             LuckyCrates Configuration
+# ========================================================
+
+key:
+  material: TRIPWIRE_HOOK
+  name: "&6&l★ Lucky Key ★"
+  glow: true
+  lore:
+    - "&7Right-click a &eLucky Crate"
+    - "&7to spin and win rare prizes!"
+    - ""
+    - "&eRight-click crate to redeem."
+
+spinner:
+  title: "&8» &6&lLucky Crate &8«"
+  # Total items to roll through during animation
+  total-ticks: 60
+  # Sounds played during spinning and prize win
+  sounds:
+    tick: BLOCK_NOTE_BLOCK_PLING
+    tick-pitch: 1.2
+    win: UI_TOAST_CHALLENGE_COMPLETE
+    win-pitch: 1.0
+    error: BLOCK_CHEST_LOCKED
+    error-pitch: 0.8
+  border-material: BLACK_STAINED_GLASS_PANE
+  pointer-material: ORANGE_STAINED_GLASS_PANE
+  win-pointer-material: LIME_STAINED_GLASS_PANE
+
+messages:
+  prefix: "&8[&6&lLuckyCrates&8] &r"
+  no-permission: "&cYou do not have permission to execute this command."
+  crate-placed: "&aSuccessfully created a Lucky Crate at &e%world%, %x%, %y%, %z%&a!"
+  crate-removed: "&cRemoved Lucky Crate at &e%world%, %x%, %y%, %z%&c."
+  no-target-block: "&cYou must look at a block within 5 blocks to place a crate!"
+  key-given: "&aGave &e%amount%x %key% &ato &e%player%&a!"
+  key-received: "&aYou received &e%amount%x %key%&a!"
+  need-key: "&cYou need a %key% &cto open this crate!"
+  already-spinning: "&cYou are already opening a crate!"
+  player-not-found: "&cPlayer &e%player% &cwas not found online."
+  invalid-amount: "&cAmount must be a positive integer."
+  editor-opened: "&6Opening Crate Editor. Put reward items inside and close to save!"
+  editor-saved: "&aCrate reward items have been updated! Saved &e%count% &aitems."
+  won-prize: "&a&lWINNER! &fYou received: &e%item% &fx&e%amount%&f!"

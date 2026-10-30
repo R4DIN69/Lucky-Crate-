@@ -1,0 +1,30 @@
+name: LuckyCrates
+version: '1.0.0'
+main: com.luckycrates.LuckyCratesPlugin
+api-version: '1.21'
+author: LuckyCratesTeam
+description: High-performance CS:GO style roulette spinner crate plugin.
+
+commands:
+  place:
+    description: Places and registers a Lucky Crate block at your target block.
+    usage: /place crate
+    permission: luckycrates.admin
+  luckykey:
+    description: Give lucky keys to players.
+    aliases: [givekey, lkey]
+    usage: /luckykey give <player> <amount>
+    permission: luckycrates.admin
+  crate:
+    description: Main command for LuckyCrates management.
+    aliases: [crates, luckycrates]
+    usage: /crate [place|key|reload|list]
+    permission: luckycrates.use
+
+permissions:
+  luckycrates.use:
+    description: Allows opening crates with keys.
+    default: true
+  luckycrates.admin:
+    description: Allows creating crates, editing prize pools, and giving keys.
+    default: op
