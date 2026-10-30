@@ -1,0 +1,72 @@
+name: Build LuckyCrates Jar
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Locate and Organize Project Files
+        run: |
+          # If pom.xml was uploaded inside a subfolder, bring everything to root
+          if [ ! -f pom.xml ]; then
+            SUBDIR=$(find . -mindepth 2 -name "pom.xml" -exec dirname {} \; | head -n 1)
+            if [ -n "$SUBDIR" ]; then
+              echo "Found pom.xml in $SUBDIR, moving to root..."
+              cp -r "$SUBDIR"/* .
+            fi
+          fi
+
+          # Organize loose files into the proper Maven directories
+          mkdir -p src/main/java/com/luckycrates/command
+          mkdir -p src/main/java/com/luckycrates/gui
+          mkdir -p src/main/java/com/luckycrates/listener
+          mkdir -p src/main/java/com/luckycrates/manager
+          mkdir -p src/main/java/com/luckycrates/util
+          mkdir -p src/main/resources
+
+          [ -f PlaceCommand.java ] && mv PlaceCommand.java src/main/java/com/luckycrates/command/ || true
+          [ -f GiveKeyCommand.java ] && mv GiveKeyCommand.java src/main/java/com/luckycrates/command/ || true
+          [ -f LuckyCratesCommand.java ] && mv LuckyCratesCommand.java src/main/java/com/luckycrates/command/ || true
+          [ -f SpinnerGUI.java ] && mv SpinnerGUI.java src/main/java/com/luckycrates/gui/ || true
+          [ -f CrateEditorGUI.java ] && mv CrateEditorGUI.java src/main/java/com/luckycrates/gui/ || true
+          [ -f CratePreviewGUI.java ] && mv CratePreviewGUI.java src/main/java/com/luckycrates/gui/ || true
+          [ -f CrateListener.java ] && mv CrateListener.java src/main/java/com/luckycrates/listener/ || true
+          [ -f GUIListener.java ] && mv GUIListener.java src/main/java/com/luckycrates/listener/ || true
+          [ -f KeyManager.java ] && mv KeyManager.java src/main/java/com/luckycrates/manager/ || true
+          [ -f CrateManager.java ] && mv CrateManager.java src/main/java/com/luckycrates/manager/ || true
+          [ -f ColorUtil.java ] && mv ColorUtil.java src/main/java/com/luckycrates/util/ || true
+          [ -f FontUtil.java ] && mv FontUtil.java src/main/java/com/luckycrates/util/ || true
+          [ -f LuckyCratesPlugin.java ] && mv LuckyCratesPlugin.java src/main/java/com/luckycrates/ || true
+          [ -f plugin.yml ] && mv plugin.yml src/main/resources/ || true
+          [ -f config.yml ] && mv config.yml src/main/resources/ || true
+
+      - name: Verify pom.xml exists
+        run: |
+          if [ ! -f pom.xml ]; then
+            echo "ERROR: pom.xml was not found in the repository!"
+            echo "Please ensure pom.xml from LuckyCrates-Maven-Project.zip is uploaded."
+            exit 1
+          fi
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'maven'
+
+      - name: Build with Maven
+        run: mvn clean package --batch-mode
+
+      - name: Upload Plugin Jar
+        uses: actions/upload-artifact@v4
+        with:
+          name: LuckyCrates-Jar
+          path: target/*.jar
